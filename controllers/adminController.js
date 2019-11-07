@@ -1,4 +1,4 @@
-let adminController = {
+const adminController = {
   getRestaurants: (req, res) => {
     return res.render('admin/restaurants')
     //return res.end("Hiii")
