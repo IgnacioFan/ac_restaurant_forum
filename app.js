@@ -16,7 +16,7 @@ app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 app.use(flash())
 app.use(passport.initialize())
 app.use(passport.session())
-
+app.use('/upload', express.static(__dirname + '/upload'))
 
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
