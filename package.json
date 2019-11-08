@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "user can find preferred restaurants here and leave their comments.",
   "main": "app.js",
+  "engines": {
+    "node": "11.14.0"
+  },
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
