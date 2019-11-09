@@ -21,7 +21,7 @@ const adminController = {
 
   postRestaurant: (req, res) => {
     if (!req.body.name) {
-      req.flash('error_message', "name didn't exist");
+      req.flash('error_messages', "name didn't exist");
       return res.redirect('back')
     }
     // const file = req.file
@@ -50,7 +50,7 @@ const adminController = {
         description: req.body.description,
         image: null
       }).then((restaurant) => {
-        req.flash('success_message', 'restaurant was successfully created')
+        req.flash('success_messages', 'restaurant was successfully created')
         res.redirect('/admin/restaurants')
       })
     }
@@ -70,7 +70,7 @@ const adminController = {
 
   putRestaurant: (req, res) => {
     if (!req.body.name) {
-      req.flash('error_message', "name didn't exist");
+      req.flash('error_messages', "name didn't exist");
       return res.redirect('back')
     }
     const { file } = req
@@ -87,7 +87,7 @@ const adminController = {
             description: req.body.description,
             image: file ? img.data.link : restaurant.image
           }).then((restaurant) => {
-            req.flash('success_message', 'restuarant was successfully to update')
+            req.flash('success_messages', 'restuarant was successfully to update')
             res.redirect('/admin/restaurants')
           })
         })
@@ -102,7 +102,7 @@ const adminController = {
           description: req.body.description,
           image: restaurant.image
         }).then((restaurant) => {
-          req.flash('success_message', 'restaurant was successfully to update')
+          req.flash('success_messages', 'restaurant was successfully to update')
           res.redirect('/admin/restaurants')
         })
       })
