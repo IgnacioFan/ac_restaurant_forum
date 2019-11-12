@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     RestaurantId: DataTypes.INTEGER
   }, {});
   Comment.associate = function (models) {
-    Comment.belongsTo(models.Restuarant)
+    Comment.belongsTo(models.Restaurant)
     Comment.belongsTo(models.User)
   };
   return Comment;
