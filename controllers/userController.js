@@ -62,20 +62,36 @@ const userController = {
   },
 
   putUser: (req, res) => {
-    return User.findByPk(req.params.id).then(user => {
-      if (user.name !== req.body.name) {
-        //console.log(req.body.name)
+    const { file } = req
+    if (file) {
+      imgur.setClientID(imgur_client_id);
+
+      imgur.upload(file.path, (err, img) => {
+        console.log(img.data.link)
+        return User.findByPk(req.params.id).then(user => {
+          user.update({
+            name: req.body.name,
+            image: file ? img.data.link : user.image
+          }).then(user => {
+            console.log('user has already updated uploaded')
+            req.flash('success_messages', `${user.name} successfully updated!`)
+            res.redirect(`/users/${user.id}`)
+          })
+        })
+      })
+    } else {
+      return User.findByPk(req.params.id).then(user => {
         user.update({
-          name: req.body.name
+          name: req.body.name,
+          image: user.image
         }).then(user => {
-          console.log('user has already updated')
+          console.log('user has already updated no upload')
           req.flash('success_messages', `${user.name} successfully updated!`)
           res.redirect(`/users/${user.id}`)
         })
-      } else {
-        res.redirect('back')
-      }
-    })
+      })
+    }
+
   }
 }
 
