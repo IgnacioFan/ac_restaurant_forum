@@ -21,13 +21,17 @@ module.exports = (app, passport) => {
     }
     res.redirect('/signin')
   }
-
+  // frontend restuarnats
   app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
   app.get('/restaurants', authenticated, restController.getRestaurants)
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
-
+  // frontend comment
   app.post('/comments', authenticated, commentController.postComment)
+  // frontend comment only for admin
   app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
+  // user profile
+  app.get('/users/:id', authenticated, userController.getUser)
+  app.get('/users/:id/edit', authenticated, userController.editUser)
 
   app.get('/signup', userController.signUpPage)
   app.post('/signup', userController.signUp)

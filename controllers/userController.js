@@ -43,6 +43,20 @@ const userController = {
   logout: (req, res) => {
     req.flash('success_messages', '登出成功！')
     res.redirect('/signin')
+  },
+
+  getUser: (req, res) => {
+    return User.findByPk(req.params.id).then(user => {
+      console.log('this is ' + user.name)
+      //console.log(user)
+      return res.render('user', { user: user })
+    })
+  },
+
+  editUser: (req, res) => {
+    return User.findByPk(req.params.id).then(user => {
+      return res.render('editUser', { user: user })
+    })
   }
 }
 
