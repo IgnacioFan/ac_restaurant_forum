@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt-nodejs')
 const db = require('../models')
 const User = db.User
+const imgur = require('imgur-node-api')
+const imgur_client_id = '0ced2f1200a3b8c'
 
 const userController = {
   signUpPage: (req, res) => {
@@ -56,6 +58,23 @@ const userController = {
   editUser: (req, res) => {
     return User.findByPk(req.params.id).then(user => {
       return res.render('editUser', { user: user })
+    })
+  },
+
+  putUser: (req, res) => {
+    return User.findByPk(req.params.id).then(user => {
+      if (user.name !== req.body.name) {
+        //console.log(req.body.name)
+        user.update({
+          name: req.body.name
+        }).then(user => {
+          console.log('user has already updated')
+          req.flash('success_messages', `${user.name} successfully updated!`)
+          res.redirect(`/users/${user.id}`)
+        })
+      } else {
+        res.redirect('back')
+      }
     })
   }
 }
