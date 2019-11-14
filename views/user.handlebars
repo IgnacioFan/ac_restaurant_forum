@@ -7,10 +7,30 @@
       <div class="col-md-8">
         <h5>{{user.name}}</h5>
         <h5>{{user.email}}</h5>
+        <h5>{{user.Comments.length}}已評論過的餐廳</h5>
         <a href="/users/{{user.id}}/edit">
           <button type="button" class="btn btn-primary">edit</button>
         </a>
       </div>
     </div>
   </div>
+</div>
+<div class="col-md-10 mx-auto mt-5 mb-3">
+  <div class="card">
+    <div class="card-header">
+      {{user.Comments.length}}已評論過的餐廳
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      {{#each user.Comments}}
+      <a href="/restaurants/{{this.Restaurant.id}}">
+        <img src="{{this.Restaurant.image}}" class="img-responsive center-block"
+          style="width: 120px; height: 120px; margin-right: 10px;">
+        <!--<p>{{this.Restaurant.name}}</p>-->
+      </a>
+      {{/each}}
+    </div>
+  </div>
+</div>
 </div>

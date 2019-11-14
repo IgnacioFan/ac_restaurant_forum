@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 app.use(methodOverride('_method'))
 
 app.listen(port, () => {
-  db.sequelize.sync();
+  //db.sequelize.sync();
   console.log(`Example app listening on port ${port}`)
 })
 
