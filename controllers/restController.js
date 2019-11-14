@@ -73,6 +73,14 @@ let restController = {
         return res.render('feeds', { restaurants: restaurants, comments: comments })
       })
     })
+  },
+
+  getDashboard: (req, res) => {
+    return Restaurant.findByPk(req.params.id, { include: [Category] }).then(restaurant => {
+      Comment.findAndCountAll({ where: { RestaurantId: restaurant.id } }).then(comments => {
+        return res.render('dashboard', { restaurant: restaurant, comments: comments })
+      })
+    })
   }
 }
 
