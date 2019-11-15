@@ -30,6 +30,10 @@ module.exports = (app, passport) => {
   // add and remove favorite
   app.post('/favorite/:restaurantId', authenticated, userController.addFavorite)
   app.delete('/favorite/:restaurantId', authenticated, userController.removeFavorite)
+  // add and remove like
+  app.post('/like/:restaurantId', authenticated, userController.addLike)
+  app.delete('/like/:restaurantId', authenticated, userController.removeLike)
+
   // frontend comment
   app.post('/comments', authenticated, commentController.postComment)
   // frontend comment only for admin
