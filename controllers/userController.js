@@ -60,10 +60,21 @@ const userController = {
           { model: User, as: 'Followings' },
           { model: Restaurant, as: 'FavoritedRestaurants' }]
       }).then(user => {
-        //Restaurant.findAll({ where: { id: user.RestaurantId } }).then(restaurants => {
-        console.log(user)
-        return res.render('user', { user: user })
-        //})
+        comments = []
+        var init = user.Comments[0].RestaurantId
+        user.Comments.forEach((comment) => {
+          //comment << comment.RestaurantId
+          if (comment.RestaurantId == init) {
+            comments.push(comment)
+          }
+
+          if (comment.RestaurantId > init) {
+            comments.push(comment)
+            init = comment.RestaurantId
+          }
+        })
+        //console.log(comments)
+        return res.render('user', { user: user, comments: comments })
       })
   },
 

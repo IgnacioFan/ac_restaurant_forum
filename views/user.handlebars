@@ -7,7 +7,9 @@
       <div class="col-md-8">
         <h5>{{user.name}}</h5>
         <h5>{{user.email}}</h5>
-        <h5>{{user.Comments.length}}已評論過的餐廳</h5>
+        <h5>{{comments.length}}已評論過的餐廳</h5>
+        <h5>{{user.Followings.length}}followings（追蹤者）</h5>
+        <h5>{{user.Followers.length}}followers（追隨者）</h5>
         <a href="/users/{{user.id}}/edit">
           <button type="button" class="btn btn-primary">edit</button>
         </a>
@@ -25,7 +27,7 @@
         <div class="card-body">
           <div class="row">
             {{#each user.Followings}}
-            <a href="/restaurants/{{this.id}}">
+            <a href="/users/{{this.id}}">
               <img src="{{this.image}}" class="img-responsive center-block"
                 style="width: 100px; height: 100px; margin: 10px;">
               <!--<p>{{this.Restaurant.name}}</p>-->
@@ -38,11 +40,11 @@
     <div class="col-md-7">
       <div class="card">
         <div class="card-header">
-          {{user.Comments.length}}已評論過的餐廳
+          {{comments.length}}已評論過的餐廳
         </div>
         <div class="card-body">
           <div class="row">
-            {{#each user.Comments}}
+            {{#each comments}}
             <a href="/restaurants/{{this.Restaurant.id}}">
               <img src="{{this.Restaurant.image}}" class="img-responsive center-block"
                 style="width: 100px; height: 100px; margin: 10px;">
@@ -63,7 +65,7 @@
         <div class="card-body">
           <div class="row">
             {{#each user.Followers}}
-            <a href="/restaurants/{{this.id}}">
+            <a href="/users/{{this.id}}">
               <img src="{{this.image}}" class="img-responsive center-block"
                 style="width: 100px; height: 100px; margin: 10px;">
               <!--<p>{{this.Restaurant.name}}</p>-->
@@ -76,7 +78,7 @@
     <div class="col-md-7">
       <div class="card">
         <div class="card-header">
-          {{user.FavoritedRestaurants.length}}已評論過的餐廳
+          {{user.FavoritedRestaurants.length}}收藏的餐廳
         </div>
         <div class="card-body">
           <div class="row">
