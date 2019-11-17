@@ -60,13 +60,12 @@ const userController = {
           { model: User, as: 'Followings' },
           { model: Restaurant, as: 'FavoritedRestaurants' }]
       }).then(user => {
+        user.Comments.sort((a, b) => a.RestaurantId - b.RestaurantId)
         comments = []
         var init = user.Comments[0].RestaurantId
+        comments.push(user.Comments[0])
         user.Comments.forEach((comment) => {
           //comment << comment.RestaurantId
-          if (comment.RestaurantId == init) {
-            comments.push(comment)
-          }
 
           if (comment.RestaurantId > init) {
             comments.push(comment)
