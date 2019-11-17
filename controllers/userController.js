@@ -53,12 +53,18 @@ const userController = {
   },
 
   getUser: (req, res) => {
-    return User.findByPk(req.user.id, { include: [Comment, { model: Comment, include: [Restaurant] }] }).then(user => {
-      //Restaurant.findAll({ where: { id: user.RestaurantId } }).then(restaurants => {
-      //console.log(user)
-      return res.render('user', { user: user })
-      //})
-    })
+    return User.findByPk(req.user.id,
+      {
+        include: [Comment, { model: Comment, include: [Restaurant] },
+          { model: User, as: 'Followers' },
+          { model: User, as: 'Followings' },
+          { model: Restaurant, as: 'FavoritedRestaurants' }]
+      }).then(user => {
+        //Restaurant.findAll({ where: { id: user.RestaurantId } }).then(restaurants => {
+        console.log(user)
+        return res.render('user', { user: user })
+        //})
+      })
   },
 
   editUser: (req, res) => {
@@ -73,13 +79,13 @@ const userController = {
       imgur.setClientID(imgur_client_id);
 
       imgur.upload(file.path, (err, img) => {
-        console.log(img.data.link)
+        //console.log(img.data.link)
         return User.findByPk(req.user.id).then(user => {
           user.update({
             name: req.body.name,
             image: file ? img.data.link : user.image
           }).then(user => {
-            console.log('user has already updated uploaded')
+            //console.log('user has already updated uploaded')
             req.flash('success_messages', `${user.name} successfully updated!`)
             res.redirect(`/users/${user.id}`)
           })
@@ -91,7 +97,7 @@ const userController = {
           name: req.body.name,
           image: user.image
         }).then(user => {
-          console.log('user has already updated no upload')
+          //console.log('user has already updated no upload')
           req.flash('success_messages', `${user.name} successfully updated!`)
           res.redirect(`/users/${user.id}`)
         })
