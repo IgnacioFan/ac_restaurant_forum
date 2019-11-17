@@ -53,7 +53,7 @@ const userController = {
   },
 
   getUser: (req, res) => {
-    return User.findByPk(req.params.id, { include: [Comment, { model: Comment, include: [Restaurant] }] }).then(user => {
+    return User.findByPk(req.user.id, { include: [Comment, { model: Comment, include: [Restaurant] }] }).then(user => {
       //Restaurant.findAll({ where: { id: user.RestaurantId } }).then(restaurants => {
       //console.log(user)
       return res.render('user', { user: user })
@@ -62,7 +62,7 @@ const userController = {
   },
 
   editUser: (req, res) => {
-    return User.findByPk(req.params.id).then(user => {
+    return User.findByPk(req.user.id).then(user => {
       return res.render('editUser', { user: user })
     })
   },
@@ -74,7 +74,7 @@ const userController = {
 
       imgur.upload(file.path, (err, img) => {
         console.log(img.data.link)
-        return User.findByPk(req.params.id).then(user => {
+        return User.findByPk(req.user.id).then(user => {
           user.update({
             name: req.body.name,
             image: file ? img.data.link : user.image
@@ -86,7 +86,7 @@ const userController = {
         })
       })
     } else {
-      return User.findByPk(req.params.id).then(user => {
+      return User.findByPk(req.user.id).then(user => {
         user.update({
           name: req.body.name,
           image: user.image
