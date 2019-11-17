@@ -5,6 +5,7 @@ const Restaurant = db.Restaurant
 const Comment = db.Comment
 const Favorite = db.Favorite
 const Like = db.Like
+const Followship = db.Followship
 const imgur = require('imgur-node-api')
 const imgur_client_id = '0ced2f1200a3b8c'
 
@@ -54,7 +55,7 @@ const userController = {
   getUser: (req, res) => {
     return User.findByPk(req.params.id, { include: [Comment, { model: Comment, include: [Restaurant] }] }).then(user => {
       //Restaurant.findAll({ where: { id: user.RestaurantId } }).then(restaurants => {
-      console.log(user)
+      //console.log(user)
       return res.render('user', { user: user })
       //})
     })
@@ -131,6 +132,43 @@ const userController = {
       where: { UserId: req.user.id, RestaurantId: req.params.restaurantId }
     }).then(like => {
       like.destroy()
+      return res.redirect('back')
+    })
+  },
+
+  getTopUser: (req, res) => {
+    return User.findAll({
+      include: [{ model: User, as: 'Followers' }]
+    }).then(users => {
+      users = users.map(user => ({
+        ...user.dataValues,
+        FollowerCount: user.Followers.length,
+        isFollowed: req.user.Followings.map(d => d.id).includes(user.id)
+      }))
+
+      users = users.sort((a, b) => b.FollowerCount - a.FollowerCount)
+      return res.render('topUser', { users: users })
+    })
+  },
+
+  addFollowing: (req, res) => {
+    return Followship.create({
+      followerId: req.user.id,
+      followingId: req.params.userId
+    }).then(followship => {
+      return res.redirect('back')
+    })
+  },
+
+  removeFollowing: (req, res) => {
+    return Followship.findOne({
+      where:
+      {
+        FollowerId: req.user.id,
+        FollowingId: req.params.userId
+      }
+    }).then(followship => {
+      followship.destroy()
       return res.redirect('back')
     })
   }

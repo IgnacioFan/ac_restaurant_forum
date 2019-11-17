@@ -25,6 +25,8 @@ module.exports = (app, passport) => {
   app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
   app.get('/restaurants', authenticated, restController.getRestaurants)
   app.get('/restaurants/feeds', authenticated, restController.getFeeds)
+  app.get('/users/top', authenticated, userController.getTopUser)
+
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
   app.get('/restaurants/:id/dashboard', authenticated, restController.getDashboard)
   // add and remove favorite
@@ -33,7 +35,9 @@ module.exports = (app, passport) => {
   // add and remove like
   app.post('/like/:restaurantId', authenticated, userController.addLike)
   app.delete('/like/:restaurantId', authenticated, userController.removeLike)
-
+  // add and remove followship
+  app.post('/following/:userId', authenticated, userController.addFollowing)
+  app.delete('/following/:userId', authenticated, userController.removeFollowing)
   // frontend comment
   app.post('/comments', authenticated, commentController.postComment)
   // frontend comment only for admin
