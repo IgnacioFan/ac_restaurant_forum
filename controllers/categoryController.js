@@ -1,11 +1,13 @@
 const db = require('../models')
 const Category = db.Category
 
+const categoryService = require('../services/categoryServices')
+
 const categoryController = {
 
   getCategories: (req, res) => {
-    return Category.findAll().then(categories => {
-      return res.render('admin/categories', { categories: categories })
+    categoryService.getCategories(res, res, (data) => {
+      return res.render('admin/categories', data)
     })
   },
 
