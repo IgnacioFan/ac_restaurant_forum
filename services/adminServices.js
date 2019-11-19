@@ -2,7 +2,7 @@ const db = require('../models')
 const Restaurant = db.Restaurant
 const Category = db.Category
 const imgur = require('imgur-node-api')
-const imgur_client_id = '0ced2f1200a3b8c'
+const imgur_client_id = process.env.IMGUR_CLIENT_ID
 
 const adminService = {
   getRestaurants: (req, res, callback) => {
@@ -13,6 +13,7 @@ const adminService = {
 
   getRestaurant: (req, res, callback) => {
     return Restaurant.findByPk(req.params.id, { include: [Category] }).then(restaurant => {
+      console.log(restaurant.image)
       callback({ restaurant: restaurant })
     })
   },
@@ -62,6 +63,50 @@ const adminService = {
       })
     }
   },
+
+  putRestaurant: (req, res, callback) => {
+    if (!req.body.name) {
+      callback({ status: "error", message: "name didn't exist" })
+    }
+    const { file } = req
+    if (file) {
+      imgur.setClientID(imgur_client_id)
+      imgur.upload(file.path, (err, img) => {
+
+        return Restaurant.findByPk(req.params.id).then((restaurant) => {
+          restaurant.update({
+            name: req.body.name,
+            tel: req.body.tel,
+            address: req.body.address,
+            opening_hours: req.body.opening_hours,
+            description: req.body.description,
+            image: file ? img.data.link : restaurant.image,
+            CategoryId: req.body.categoryId
+          }).then((restaurant) => {
+            console.log(restaurant.image)
+            callback({ status: "success", message: "restuarant was successfully to update" })
+          })
+        })
+      })
+    } else {
+      return Restaurant.findByPk(req.params.id).then((restaurant) => {
+        restaurant.update({
+          name: req.body.name,
+          tel: req.body.tel,
+          address: req.body.address,
+          opening_hours: req.body.opening_hours,
+          description: req.body.description,
+          image: restaurant.image,
+          CategoryId: req.body.categoryId
+        }).then((restaurant) => {
+          console.log(restaurant.image)
+          callback({ status: "success", message: "restuarant was successfully to update" })
+        })
+      })
+    }
+  },
+
+
 
 }
 
