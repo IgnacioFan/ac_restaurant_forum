@@ -3,8 +3,7 @@ const db = require('../models')
 const Restaurant = db.Restaurant
 const User = db.User
 const Category = db.Category
-const imgur = require('imgur-node-api')
-const imgur_client_id = '0ced2f1200a3b8c'
+
 
 const adminService = require('../services/adminServices')
 
@@ -24,42 +23,16 @@ const adminController = {
   },
 
   postRestaurant: (req, res) => {
-    if (!req.body.name) {
-      req.flash('error_messages', "name didn't exist");
-      return res.redirect('back')
-    }
-    // const file = req.file
-    const { file } = req
-    if (file) {
-      imgur.setClientID(imgur_client_id);
-      imgur.upload(file.path, (err, img) => {
-        return Restaurant.create({
-          name: req.body.name,
-          tel: req.body.tel,
-          address: req.body.address,
-          opening_hours: req.body.opening_hours,
-          description: req.body.description,
-          image: file ? img.data.link : null,
-          CategoryId: req.body.categoryId
-        }).then((restaurant) => {
-          req.flash('success_messages', 'restaurant was successfully created')
-          return res.redirect('/admin/restaurants')
-        })
-      })
-    } else {
-      return Restaurant.create({
-        name: req.body.name,
-        tel: req.body.tel,
-        address: req.body.address,
-        opening_hours: req.body.opening_hours,
-        description: req.body.description,
-        image: null,
-        CategoryId: req.body.categoryId
-      }).then((restaurant) => {
-        req.flash('success_messages', 'restaurant was successfully created')
-        res.redirect('/admin/restaurants')
-      })
-    }
+    adminService.postRestaurant(req, res, (result) => {
+      if (result['status'] === 'error') {
+        req.flash('error_messages', result['message'])
+        return res.redirect('back')
+      }
+
+      req.flash('success_messages', result['message'])
+      return res.redirect('/admin/restaurants')
+
+    })
   },
 
   getRestaurant: (req, res) => {
