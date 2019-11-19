@@ -34,13 +34,11 @@ const categoryController = {
   },
 
   putCategory: (req, res) => {
-    return Category.findByPk(req.params.id).then(category => {
-      category.update({
-        name: req.body.name
-      }).then(category => {
-        req.flash('success_messages', `${category.name} was successfully updated`)
-        res.redirect('/admin/categories')
-      })
+    categoryService.putCategory(req, res, (data) => {
+      if (data["status"] === "success") {
+        req.flash('success_messages', data["message"])
+        return res.redirect('/admin/categories')
+      }
     })
   },
 
